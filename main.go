@@ -12,9 +12,11 @@ import (
 	"backend/gettoken"
 	"backend/login"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/goccy/go-json"
+	"github.com/joho/godotenv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -22,7 +24,11 @@ import (
 )
 
 func init() {
-	LoadEnv()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	fmt.Println(os.Getenv("APPID"))
 	db.ConnectDb()
 	bucket.AwsInit()
 }
