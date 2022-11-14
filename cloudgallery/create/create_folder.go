@@ -3,6 +3,7 @@ package create
 import (
 	"backend/bucket"
 	"backend/db"
+	"log"
 
 	"backend/modal"
 	"bytes"
@@ -79,13 +80,14 @@ func CreateFolder(c *fiber.Ctx) error {
 			ContentType:        &conType,
 		})
 		fmt.Println(result.Location)
-		if UploadErr != nil { 
+		if UploadErr != nil {
 			i := modal.Image{
 				Name:       image.Name,
 				Localurl:   image.LocalURL,
 				IsSelected: false,
 			}
 			failed = append(failed, &i)
+			log.Printf("Image Upload Failed %v", image.Name)
 			continue
 		}
 		// listing succes ent
@@ -97,6 +99,7 @@ func CreateFolder(c *fiber.Ctx) error {
 			IsSelected: false,
 		}
 		success = append(success, &i)
+		log.Printf("Image Uploaded %v", image.Name)
 
 	}
 	tempJob := modal.Job{
