@@ -4,6 +4,7 @@ import (
 	"backend/modal"
 	"fmt"
 	"log"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -22,7 +23,15 @@ func ConnectDb() {
 	dsn := "host=database-1.cgcoorku463g.ap-south-1.rds.amazonaws.com user=postgres password=Rutik!123 dbname=postgres port=5432 sslmode=require"
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: logger.New(
+			&log.Logger{}, // io writer
+			logger.Config{
+				SlowThreshold:             time.Minute, // Slow SQL threshold
+				LogLevel:                  logger.Info, // Log level
+				IgnoreRecordNotFoundError: false,       // Ignore ErrRecordNotFound error for logger
+				Colorful:                  true,        // Disable color
+			},
+		),
 	})
 
 	if err != nil {
@@ -107,7 +116,7 @@ func DeleteFolder(id uint) (eror error) {
 	return
 }
 
-func RetriveFolder(id uint) ( folderData *modal.Job, erro error) {
+func RetriveFolder(id uint) (folderData *modal.Job, erro error) {
 	var folder modal.Job
 	folder.ID = id
 	err := Database.DB.Preload("Images").First(&folder).Error
@@ -115,7 +124,7 @@ func RetriveFolder(id uint) ( folderData *modal.Job, erro error) {
 		erro = err
 		return
 	}
-	log.Println(len(folder.Images),"-----------ooooooooooooooooo--------------")
+	log.Println(len(folder.Images), "-----------ooooooooooooooooo--------------")
 	folderData = &folder
 	return
 }

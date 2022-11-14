@@ -11,11 +11,14 @@ import (
 	"backend/db"
 	"backend/gettoken"
 	"backend/login"
-	"encoding/json"
 	"fmt"
 	"os"
 
+	"github.com/goccy/go-json"
+
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
 )
 
 func init() {
@@ -30,10 +33,11 @@ func main() {
 		JSONEncoder: json.Marshal,
 		JSONDecoder: json.Unmarshal,
 	})
+	app.Use(logger.New())
 	app.Get("/", func(c *fiber.Ctx) error {
-
-		return c.SendStatus(fiber.StatusOK)
+		return c.Status(fiber.StatusOK).SendString("Hello")
 	})
+	app.Get("/metrics", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
 	app.Post("/getcrftoken", gettoken.GetToken)
 	app.Post("/getnewaccount", createaccount.NewAccount) //**
 	app.Post("/demo", createaccount.Demo)                //**
