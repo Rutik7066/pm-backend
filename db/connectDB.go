@@ -4,7 +4,7 @@ import (
 	"backend/modal"
 	"fmt"
 	"log"
-
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -30,7 +30,6 @@ func ConnectDb() {
 		log.Fatal("Failed to connect to database____________________________________. \n", err)
 	}
 
-	db.Logger = logger.Default.LogMode(logger.Info)
 	if err := db.AutoMigrate(&modal.Customer{}, &modal.Job{}, &modal.Image{}); err != nil {
 		// log.Fatalln("______________ \n", err)
 		fmt.Println("____________________________________________________________________\n", err)
