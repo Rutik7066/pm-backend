@@ -23,15 +23,7 @@ func ConnectDb() {
 	dsn := "host=database-1.cgcoorku463g.ap-south-1.rds.amazonaws.com user=postgres password=Rutik!123 dbname=postgres port=5432 sslmode=require"
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.New(
-			&log.Logger{}, // io writer
-			logger.Config{
-				SlowThreshold:             time.Minute, // Slow SQL threshold
-				LogLevel:                  logger.Info, // Log level
-				IgnoreRecordNotFoundError: false,       // Ignore ErrRecordNotFound error for logger
-				Colorful:                  true,        // Disable color
-			},
-		),
+	
 	})
 
 	if err != nil {
