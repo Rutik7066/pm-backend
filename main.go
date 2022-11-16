@@ -19,7 +19,6 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 )
 
@@ -39,9 +38,9 @@ func main() {
 		JSONEncoder: json.Marshal,
 		JSONDecoder: json.Unmarshal,
 	})
-	app.Use(logger.New())
+	
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Status(fiber.StatusOK).SendString("Hello")
+		return c.SendString("Hello, ✌ World!")
 	})
 	app.Get("/metrics", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
 	app.Post("/getcrftoken", gettoken.GetToken)
@@ -58,5 +57,5 @@ func main() {
 	app.Delete("/deleteimage", delete.DeleteImage)   //**
 	app.Put("/updatefolder", update.UpdateFolder)
 	app.Get("/getfolder", read.GetClientFolder)
-	app.Listen(":8000")
+	app.Listen(":3000")
 }
