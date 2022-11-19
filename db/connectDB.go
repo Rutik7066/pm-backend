@@ -20,7 +20,7 @@ var Database DBINSTANCE
 
 func ConnectDb() {
 
-	dsn := "host=database-1.cgcoorku463g.ap-south-1.rds.amazonaws.com user=postgres password=Rutik!123 dbname=postgres port=5432 sslmode=require"
+	dsn := "host=database-2.c9aejhicjxyn.ap-south-1.rds.amazonaws.com user=postgres password=Rutik123 dbname=database-2 port=5432 sslmode=require"
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 	
