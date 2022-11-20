@@ -12,7 +12,8 @@ import (
 
 type DBINSTANCE struct {
 	DB *gorm.DB
-}
+} 
+
 
 var Database DBINSTANCE
 
