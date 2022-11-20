@@ -27,7 +27,7 @@ func init() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	fmt.Println(os.Getenv("APPID"))
+	fmt.Println(os.Getenv("Init"))
 	db.ConnectDb()
 	bucket.AwsInit()
 }
@@ -58,4 +58,5 @@ func main() {
 	app.Put("/updatefolder", update.UpdateFolder)
 	app.Get("/getfolder", read.GetClientFolder)
 	app.Listen(":3000")
+		fmt.Println("backend up & running ✌")
 }

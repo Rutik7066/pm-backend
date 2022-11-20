@@ -20,18 +20,18 @@ var Database DBINSTANCE
 
 func ConnectDb() {
 
-	dsn := "host=database-2.c9aejhicjxyn.ap-south-1.rds.amazonaws.com user=postgres password=Rutik123 dbname=database-2 port=5432 sslmode=require"
+	dsn := "host=database-2.c9aejhicjxyn.ap-south-1.rds.amazonaws.com user=postgres password=Rutik123 dbname=mydb port=5432 sslmode=require"
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 	
 	})
 
 	if err != nil {
-		log.Fatal("Failed to connect to database____________________________________. \n", err)
+		fmt.Println(err.Error())
+		fmt.Println("Failed to connect to database____________________________________. \n", err)
 	}
 
 	if err := db.AutoMigrate(&modal.Customer{}, &modal.Job{}, &modal.Image{}); err != nil {
-		// log.Fatalln("______________ \n", err)
 		fmt.Println("____________________________________________________________________\n", err)
 	}
 
