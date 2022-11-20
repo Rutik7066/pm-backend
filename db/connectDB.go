@@ -5,11 +5,9 @@ import (
 	"fmt"
 	"log"
 
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-
 )
 
 type DBINSTANCE struct {
@@ -28,7 +26,7 @@ func ConnectDb() {
 
 	if err != nil {
 		fmt.Println(err.Error())
-		fmt.Println("Failed to connect to database____________________________________. \n", err)
+		panic("Failed to connect to database____________________________________. \n")
 	}
 
 	if err := db.AutoMigrate(&modal.Customer{}, &modal.Job{}, &modal.Image{}); err != nil {
