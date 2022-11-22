@@ -13,7 +13,7 @@ func GetClientFolder(c *fiber.Ctx) error {
 		AwsId string `json:"aws_id"`
 	}
 	var req Req
-	err := c.BodyParser(&req)
+	c.BodyParser(&req)
 	fmt.Println(req.Uid, "_________________________")
 	fmt.Println(req.AwsId, "_________________________")
 	// if err != nil {
