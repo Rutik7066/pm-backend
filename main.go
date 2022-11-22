@@ -42,7 +42,7 @@ func main() {
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, ✌ World!")
 	})
-	app.Get("/metrics", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
+	app.Get("/moniter", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
 	app.Post("/getcrftoken", gettoken.GetToken)
 	app.Post("/getnewaccount", createaccount.NewAccount) //**
 	app.Post("/demo", createaccount.Demo)                //**
@@ -57,6 +57,6 @@ func main() {
 	app.Delete("/deleteimage", delete.DeleteImage)   //**
 	app.Put("/updatefolder", update.UpdateFolder)
 	app.Post("/getfolder", read.GetClientFolder)
+	fmt.Println("backend up & running ✌")
 	app.Listen(":3000")
-		fmt.Println("backend up & running ✌")
 }
