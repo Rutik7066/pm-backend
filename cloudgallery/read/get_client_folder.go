@@ -13,16 +13,15 @@ func GetClientFolder(c *fiber.Ctx) error {
 		AwsId string `json:"aws_id"`
 	}
 	var req Req
-	c.BodyParser(&req)
-	fmt.Println(req.Uid, "_________________________")
-	fmt.Println(req.AwsId, "_________________________")
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// 	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-	// 		"message": "Invalid Param",
-	// 		"error":   err.Error(),
-	// 	})
-	// }
+	err := c.BodyParser(&req)
+	fmt.Println(req, "_________________________")
+	if err != nil {
+		fmt.Println(err.Error())
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid Param",
+			"error":   err.Error(),
+		})
+	}
 
 	job, err := db.GetFolderForClient(req.AwsId, req.Uid)
 	if err != nil {
