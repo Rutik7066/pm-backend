@@ -3,6 +3,7 @@ package read
 import (
 	"backend/db"
 	"fmt"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
