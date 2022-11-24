@@ -3,13 +3,12 @@ package create
 import (
 	"backend/bucket"
 	"backend/db"
-	"log"
-
 	"backend/modal"
-	"bytes"
 	"context"
-	"encoding/base64"
+
 	"fmt"
+	"log"
+	"mime/multipart"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
@@ -17,27 +16,61 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func CreateFolder(c *fiber.Ctx) error {
-	type Image struct {
-		Name     string `json:"name"`
-		LocalURL string `json:"localURL"`
-		Base64   string `json:"base64"`
-	}
-	type UpReq struct {
-		UID    string  `json:"uid"`
-		Title  string  `json:"title"`
-		Length int     `json:"length"`
-		Image  []Image `json:"job"`
-	}
+type Image struct {
+	Name      string
+	LocalURL  string
+	ImageData multipart.File
+}
+type UpReq struct {
+	UID    string
+	Title  string
+	Length int
+	Image  []Image
+}
 
-	var upJob UpReq
-	if parErr := c.BodyParser(&upJob); parErr != nil {
+func convertForm(form *multipart.Form) (req *UpReq, err error) {
+	var up UpReq
+	up.UID = form.Value["uid"][0]
+	up.Title = form.Value["title"][0]
+	baseDir := form.Value["dir"][0]
+	var images []Image
+	for _, fileHeader := range form.File {
+		for _, file := range fileHeader {
+			fmt.Printf("Type %T", file)
+			fmt.Println(file.Filename, file.Size, file.Header["Content-Type"][0])
+			Ofile, erro := file.Open()
+			if erro != nil {
+				err = erro
+				return
+			}
+			i := Image{
+				Name:      file.Filename,
+				LocalURL:  baseDir + "\\" + file.Filename,
+				ImageData: Ofile,
+			}
+			images = append(images, i)
+		}
+	}
+	up.Length = len(images)
+	up.Image = images
+	req = &up
+	return
+}
+
+func CreateFolder(c *fiber.Ctx) error {
+	form, parErr := c.MultipartForm()
+	if parErr != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Invalid Param",
 		})
 
 	}
-	fmt.Println(upJob.UID)
+	upJob, parErro := convertForm(form)
+	if parErro != nil {
+		fmt.Println(parErro.Error())
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	fmt.Printf("Uid Is %v", upJob.UID)
 	customer := db.GetCustomer(upJob.UID)
 	if customer.ID == 0 {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -54,19 +87,6 @@ func CreateFolder(c *fiber.Ctx) error {
 	var success []*modal.Image
 
 	for _, image := range upJob.Image {
-		// decoding
-		data, err := base64.StdEncoding.DecodeString(image.Base64)
-		if err != nil {
-			i := modal.Image{
-				Name:       image.Name,
-				Localurl:   image.LocalURL,
-				IsSelected: false,
-			}
-			failed = append(failed, &i)
-			continue
-		}
-		// converting to image
-		imageData := bytes.NewBuffer(data)
 		uploader := manager.NewUploader(bucket.AWSS3CLIENT)
 		conDi := "inline"
 		conType := "image/jpeg"
@@ -75,7 +95,7 @@ func CreateFolder(c *fiber.Ctx) error {
 		result, UploadErr := uploader.Upload(context.TODO(), &s3.PutObjectInput{
 			Bucket:             aws.String("cloud-gallery-2022"),
 			Key:                aws.String(imagePath),
-			Body:               imageData,
+			Body:               image.ImageData,
 			ContentDisposition: &conDi,
 			ContentType:        &conType,
 		})
