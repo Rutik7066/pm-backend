@@ -32,6 +32,7 @@ func init() {
 	db.ConnectDb()
 	bucket.AwsInit()
 }
+// 
 func main() {
 	fmt.Println(os.Getenv("APPID"))
 
