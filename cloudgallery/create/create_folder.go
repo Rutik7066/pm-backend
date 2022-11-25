@@ -70,7 +70,7 @@ func CreateFolder(c *fiber.Ctx) error {
 		fmt.Println(parErro.Error())
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
-	fmt.Printf("Uid Is %v", upJob.UID)
+	fmt.Printf("Uid Is %v \n", upJob.UID)
 	customer := db.GetCustomer(upJob.UID)
 	if customer.ID == 0 {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{

@@ -9,7 +9,7 @@ import (
 	"backend/cloudgallery/update"
 	"backend/createaccount"
 
-	// "backend/db"
+	"backend/db"
 	"backend/gettoken"
 	"backend/login"
 	"fmt"
@@ -29,7 +29,7 @@ func init() {
 		log.Fatal("Error loading .env file")
 	}
 	fmt.Println(os.Getenv("Init"))
-	// db.ConnectDb()
+	db.ConnectDb()
 	bucket.AwsInit()
 }
 func main() {
