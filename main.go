@@ -57,7 +57,7 @@ func main() {
 	app.Post("/addimage", create.AddImage)
 	app.Delete("/deletefolder", delete.DeleteFolder) //**
 	app.Delete("/deleteimage", delete.DeleteImage)   //**
-	app.Put("/updatefolder", update.UpdateFolder)
+	app.Post("/updatefolder", update.UpdateFolder)
 	app.Get("/getfolder", read.GetClientFolder)
 	fmt.Println("backend up & running ✌")
 	app.Listen(":3000")

@@ -16,7 +16,7 @@ func Demo(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusBadRequest)
 	}
 	customer.Credit = 50
-	customer.ValidTill = time.Now().Add(time.Hour * 24 * 7)
+	customer.ValidTill = time.Now().Add(time.Hour * 24 * 3)
 	dberror := db.Database.DB.Create(&customer).Error
 	if dberror != nil {
 		fmt.Println(dberror)
