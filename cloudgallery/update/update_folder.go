@@ -10,6 +10,8 @@ import (
 )
 
 func UpdateFolder(c *fiber.Ctx) error {
+	temp := c.Body()
+	fmt.Println(string(temp))
 	var req modal.Job
 	peror := c.BodyParser(&req)
 	if peror != nil {
