@@ -16,11 +16,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/goccy/go-json"
+	
 	"github.com/joho/godotenv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func init() {
@@ -36,13 +37,10 @@ func init() {
 func main() {
 	fmt.Println(os.Getenv("APPID"))
 
-	app := fiber.New(fiber.Config{
-		JSONEncoder: json.Marshal,
-		JSONDecoder: json.Unmarshal,
-	})
+	app := fiber.New()
 	app.Use(cors.New())
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, ✌ World!")
+		return c.SendString("Hello World  ✌")
 	})
 	app.Get("/moniter", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
 	app.Post("/getcrftoken", gettoken.GetToken)
