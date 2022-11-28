@@ -32,10 +32,10 @@ func DeleteFolder(c *fiber.Ctx) error {
 	}
 	fmt.Println(2)
 	for _, image := range folder.Images {
-		log.Println(&image.Key,"=====================================")
+		log.Println(&image.Key, "=====================================")
 		_, eror := bucket.AWSS3CLIENT.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
 			Bucket: aws.String("cloud-gallery-2022"),
-			Key:    image.Key,
+			Key:    &image.Key,
 		})
 		if eror != nil {
 			continue

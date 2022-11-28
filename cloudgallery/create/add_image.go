@@ -88,7 +88,7 @@ func AddImage(c *fiber.Ctx) error {
 			Localurl:   image.LocalURL,
 			BucketUrl:  result.Location,
 			IsSelected: false,
-			Key:        &req.AwsID,
+			Key:        req.AwsID,
 		}
 		success = append(success, &i)
 

@@ -114,7 +114,7 @@ func CreateFolder(c *fiber.Ctx) error {
 		i := modal.Image{
 			Name:       image.Name,
 			Localurl:   image.LocalURL,
-			Key:        result.Key,
+			Key:        *result.Key,
 			BucketUrl:  result.Location,
 			IsSelected: false,
 		}

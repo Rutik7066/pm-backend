@@ -40,7 +40,7 @@ func main() {
 		JSONEncoder: json.Marshal,
 		JSONDecoder: json.Unmarshal,
 	})
-	
+	app.Use(cors.New())
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, ✌ World!")
 	})

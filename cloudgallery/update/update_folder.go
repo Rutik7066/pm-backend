@@ -10,12 +10,12 @@ import (
 )
 
 func UpdateFolder(c *fiber.Ctx) error {
-	temp := c.Body()
-	fmt.Println(string(temp))
 	var req modal.Job
 	peror := c.BodyParser(&req)
+	temp := c.Body()
+	fmt.Println(string(temp))
 	if peror != nil {
-		return c.SendStatus(fiber.StatusBadRequest)
+		return c.Status(fiber.StatusBadRequest).JSON(peror.Error())
 	}
 	eroor := db.Database.DB.Session(&gorm.Session{FullSaveAssociations: true}).Save(&req).Error
 	if eroor != nil {

@@ -41,9 +41,9 @@ type Job struct {
 type Image struct {
 	ID         uint `gorm:"primary Key;autoIncrement" json:"id"`
 	JobID      uint
-	Key        *string `json:"key"`
-	Name       string  `json:"name"`
-	Localurl   string  `json:"local_url"`
-	BucketUrl  string  `json:"bucket_url"`
-	IsSelected bool    `json:"is_selected"`
+	Key        string `json:"key"`
+	Name       string `json:"name"`
+	Localurl   string `json:"local_url"`
+	BucketUrl  string `json:"bucket_url"`
+	IsSelected bool   `json:"is_selected"`
 }
