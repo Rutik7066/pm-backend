@@ -33,7 +33,6 @@ func init() {
 
 func main() {
 	fmt.Println(os.Getenv("APPID"))
-
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -56,7 +55,6 @@ func main() {
 	app.Post("/updatefolder", update.UpdateFolder)
 	app.Get("/getfolder", read.GetClientFolder)
 	fmt.Println("backend up & running ✌")
-
 	erro := app.ListenTLS(":443", "./cert.pem", "./cert.key")
 	if erro != nil {
 		panic("failed")
