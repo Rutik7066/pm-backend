@@ -8,17 +8,17 @@ import (
 	"backend/cloudgallery/read"
 	"backend/cloudgallery/update"
 	"backend/createaccount"
-
 	"backend/db"
 	"backend/gettoken"
 	"backend/login"
 	"fmt"
 	"log"
 	"os"
-	"github.com/joho/godotenv"
+
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
+	"github.com/joho/godotenv"
 )
 
 func init() {
@@ -30,13 +30,14 @@ func init() {
 	db.ConnectDb()
 	bucket.AwsInit()
 }
-// 
+
 func main() {
 	fmt.Println(os.Getenv("APPID"))
 
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Get("/", func(c *fiber.Ctx) error {
+		fmt.Println("Hello World  ✌")
 		return c.SendString("Hello World  ✌")
 	})
 	app.Get("/moniter", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
@@ -55,5 +56,9 @@ func main() {
 	app.Post("/updatefolder", update.UpdateFolder)
 	app.Get("/getfolder", read.GetClientFolder)
 	fmt.Println("backend up & running ✌")
-	app.Listen(":3000")
+
+	erro := app.ListenTLS(":443", "./cert.pem", "./cert.key")
+	if erro != nil {
+		panic("failed")
+	}
 }
