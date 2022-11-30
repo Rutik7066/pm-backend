@@ -55,6 +55,8 @@ func main() {
 	app.Post("/updatefolder", update.UpdateFolder)
 	app.Get("/getfolder", read.GetClientFolder)
 	fmt.Println("backend up & running ✌")
-	app.ListenMutualTLS(":443", "./cert.pem", "./cert.key", "./ca-chain-cert.pem")
-
+apperro :=	app.ListenMutualTLS(":443", "./cert.pem", "./cert.key", "./ca-chain-cert.pem")
+	if apperro != nil {
+		log.Fatalln(apperro.Error())
+	}
 }
