@@ -55,6 +55,6 @@ func main() {
 	app.Post("/updatefolder", update.UpdateFolder)
 	app.Get("/getfolder", read.GetClientFolder)
 	fmt.Println("backend up & running ✌")
-	app.ListenTLS(":3000", "./cert.cer", "./privatekey.pkey")
+	app.ListenMutualTLS(":443", "./cert.pem", "./cert.key", "./ca-chain-cert.pem")
 
 }
