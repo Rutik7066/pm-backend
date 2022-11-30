@@ -11,8 +11,10 @@ import (
 	"backend/db"
 	"backend/gettoken"
 	"backend/login"
+	"crypto/tls"
 	"fmt"
 	"log"
+	"net"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -55,8 +57,8 @@ func main() {
 	app.Post("/updatefolder", update.UpdateFolder)
 	app.Get("/getfolder", read.GetClientFolder)
 	fmt.Println("backend up & running ✌")
-apperro :=	app.ListenMutualTLS(":443", "./cert.pem", "./cert.key", "./ca-chain-cert.pem")
-	if apperro != nil {
-		log.Fatalln(apperro.Error())
-	}
+	ln, _ := net.Listen("tcp", ":3000")
+	cer, _ := tls.LoadX509KeyPair("server.crt", "server.key")
+	ln = tls.NewListener(ln, &tls.Config{Certificates: []tls.Certificate{cer}})
+	app.Listener(ln)
 }
