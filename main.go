@@ -57,8 +57,5 @@ func main() {
 	app.Post("/updatefolder", update.UpdateFolder)
 	app.Get("/getfolder", read.GetClientFolder)
 	fmt.Println("backend up & running ✌")
-	ln, _ := net.Listen("tcp", ":3000")
-	cer, _ := tls.LoadX509KeyPair("server.crt", "server.key")
-	ln = tls.NewListener(ln, &tls.Config{Certificates: []tls.Certificate{cer}})
-	app.Listener(ln)
+	app.Listen(":3000")
 }
