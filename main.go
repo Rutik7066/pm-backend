@@ -38,7 +38,7 @@ func main() {
 	app := fiber.New(fiber.Config{
     StrictRouting: true,
 		BodyLimit : 5 * 1024 * 1024  * 1024 ,
-	AppName: "Photography Manager"
+	AppName: "Photography Manager",
 })
 	app.Use(cors.New())
 	app.Get("/", func(c *fiber.Ctx) error {
