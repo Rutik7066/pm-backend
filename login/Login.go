@@ -3,6 +3,8 @@ package login
 import (
 	"backend/db"
 	"backend/modal"
+	"encoding/json"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -12,10 +14,15 @@ func Login(c *fiber.Ctx) error {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
+	log.Println(c.Body())
+	log.Println(string(c.Body()))
 	var login logindetail
-	if c.BodyParser(&login) != nil {
+	parErro := json.Unmarshal([]byte(c.Body()), &login)
+	log.Println(login)
+	if parErro != nil {
+		log.Println(parErro.Error())
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"mesage": "Incorrect Credential",
+			"mesage": "Bad Request",
 		})
 	}
 	var user modal.Customer
