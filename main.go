@@ -35,7 +35,11 @@ func init() {
 
 func main() {
 	fmt.Println(os.Getenv("APPID"))
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+    StrictRouting: true,
+		BodyLimit : 5 * 1024 * 1024  * 1024 ,
+	AppName: "Photography Manager"
+})
 	app.Use(cors.New())
 	app.Get("/", func(c *fiber.Ctx) error {
 		fmt.Println("Hello World  ✌")
