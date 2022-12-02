@@ -14,10 +14,10 @@ func Login(c *fiber.Ctx) error {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
-	log.Println(c.Body()) 
-	
+	log.Println(c.Body())  
 	log.Println(string(c.Body())) 
 	var login logindetail 
+	
 	parErro := json.Unmarshal([]byte(c.Body()), &login)
 	log.Println(login)
 	if parErro != nil {
