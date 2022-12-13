@@ -9,14 +9,15 @@ import (
 	"backend/cloudgallery/update"
 	"backend/createaccount"
 	"backend/db"
-	"backend/gettoken"
 	"backend/login"
+	"backend/rpay"
 
 	"fmt"
 	"log"
-	
+
 	"os"
 
+	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
@@ -35,18 +36,21 @@ func init() {
 
 func main() {
 	fmt.Println(os.Getenv("APPID"))
+
 	app := fiber.New(fiber.Config{
-    StrictRouting: true,
-		BodyLimit : 5 * 1024 * 1024  * 1024 ,
-	AppName: "Photography Manager",
-})
+		StrictRouting: true,
+		BodyLimit:     10 * 1024 * 1024 * 1024,
+		AppName:       "Photography Manager",
+		JSONEncoder:   json.Marshal,
+		JSONDecoder:   json.Unmarshal,
+	})
 	app.Use(cors.New())
 	app.Get("/", func(c *fiber.Ctx) error {
 		fmt.Println("Hello World  ✌")
 		return c.SendString("Hello World  ✌")
 	})
 	app.Get("/moniter", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
-	app.Post("/getcrftoken", gettoken.GetToken)
+	// app.Post("/getcrftoken", gettoken.GetToken)
 	app.Post("/getnewaccount", createaccount.NewAccount) //**
 	app.Post("/demo", createaccount.Demo)                //**
 	app.Post("/confirmandcreate", createaccount.CreateAccount)
@@ -60,6 +64,7 @@ func main() {
 	app.Delete("/deleteimage", delete.DeleteImage)   //**
 	app.Post("/updatefolder", update.UpdateFolder)
 	app.Get("/getfolder", read.GetClientFolder)
+	app.Post("/createorder", rpay.CreateOrder)
 	fmt.Println("backend up & running ✌")
 	app.Listen(":3000")
 }
