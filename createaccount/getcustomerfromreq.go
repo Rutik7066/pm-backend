@@ -6,19 +6,17 @@ import (
 )
 
 type ConfirmationRequest struct {
-	OrderId          string  `json:"order_id"`
-	CustomerName     string  `json:"customer_name"`
-	CustomerPhone    string  `json:"customer_phone"`
-	CustomerAltPhone string  `json:"customer_alt_phone"`
-	CustomerEmail    string  `json:"customer_email"`
-	CustomerPass     string  `json:"password"`
-	BusinessAddress  string  `json:"business_address"`
-	FbId             string  `json:"fb_id"`
-	SnapId           string  `json:"snap_id"`
-	InstaId          string  `json:"insta_id"`
-	Web              string  `json:"web"`
-	IpAddress        string  `json:"ip_address"`
-	PlanPrice        float64 `json:"plan_price"`
+	Razorpay_payment_id string  `json:"razorpay_payment_id"`
+	Razorpay_order_id   string  `json:"razorpay_order_id"`
+	Razorpay_signature  string  `json:"razorpay_signature"`
+	CustomerName        string  `json:"customername"`
+	CustomerPhone       string  `json:"customerphone"`
+	CustomerAltPhone    string  `json:"customeraltphone"`
+	CustomerEmail       string  `json:"customeremail"`
+	CustomerPass        string  `json:"password"`
+	BussinesName        string  `json:"businessname"`
+	BusinessAddress     string  `json:"businessaddress"`
+	PlanPrice           float64 `json:"planprice"`
 }
 
 func GetCustomerFromReq(reqUser *ConfirmationRequest) modal.Customer {
@@ -29,11 +27,7 @@ func GetCustomerFromReq(reqUser *ConfirmationRequest) modal.Customer {
 		CustomerAltPhone: reqUser.CustomerAltPhone,
 		CustomerPass:     reqUser.CustomerPass,
 		BusinessAddress:  reqUser.BusinessAddress,
-		FbId:             reqUser.FbId,
-		SnapId:           reqUser.SnapId,
-		InstaId:          reqUser.InstaId,
-		Web:              reqUser.Web,
-		IpAddress:        reqUser.IpAddress,
+		BusinessName:     reqUser.BussinesName,
 		PlanPrice:        reqUser.PlanPrice,
 		ValidTill:        time.Now().Add(time.Hour * 8760),
 		Credit:           15,

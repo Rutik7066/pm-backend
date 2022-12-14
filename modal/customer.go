@@ -18,17 +18,10 @@ type Customer struct {
 	CustomerPass     string         `json:"password"`
 	BusinessName     string         `json:"business_name"`
 	BusinessAddress  string         `json:"business_address"`
-	FbId             string         `json:"fb_id"`
-	SnapId           string         `json:"snap_id"`
-	InstaId          string         `json:"insta_id"`
-	Web              string         `json:"web"`
-	Youtube          string         `json:"youtube"`
-	// youtube channel
-	IpAddress string    `json:"ip_address"`
-	PlanPrice float64   `json:"plan_price"`
-	Credit    int       `json:"credit"`
-	ValidTill time.Time `json:"valid_till"`
-	Jobs      []*Job    `json:"jobs"`
+	PlanPrice        float64        `json:"plan_price"`
+	Credit           int            `json:"credit"`
+	ValidTill        time.Time      `json:"valid_till"`
+	Jobs             []*Job         `json:"jobs"`
 }
 type Job struct {
 	ID         uint `gorm:"primary Key;autoIncrement" json:"id"`

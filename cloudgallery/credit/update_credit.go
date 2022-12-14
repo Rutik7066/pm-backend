@@ -2,18 +2,22 @@ package credit
 
 import (
 	"backend/db"
-	"backend/helper"
+	"crypto/hmac"
+	"crypto/sha256"
+	"crypto/subtle"
+	"encoding/hex"
 	"fmt"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func UpdateCredit(c *fiber.Ctx) error {
 	type creditReq struct {
-		OrderId  string `json:"order_id"`
-		Uid      string `json:"uid"`
-		PlanName string `json:"plan_name"`
+		Razorpay_payment_id string `json:"razorpay_payment_id"`
+		Razorpay_order_id   string `json:"razorpay_order_id"`
+		Razorpay_signature  string `json:"razorpay_signature"`
+		Uid                 string `json:"uid"`
+		PlanName            string `json:"planname"`
 	}
 	var req creditReq
 	if err := c.BodyParser(&req); err != nil {
@@ -21,16 +25,30 @@ func UpdateCredit(c *fiber.Ctx) error {
 			"messege": "Invalid Param",
 		})
 	}
-	paymentDetail, err := helper.GetPaymentDetail(req.OrderId)
+	data := req.Razorpay_order_id + "|" + req.Razorpay_payment_id
+	fmt.Printf("Secret: %s Data: %s\n", "vAr2uK7Gix5vp0I2ugJkxrWX", data)
+	h := hmac.New(sha256.New, []byte("vAr2uK7Gix5vp0I2ugJkxrWX"))
+
+	// Write Data to it
+	_, err := h.Write([]byte(data))
+
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"messege": "Internal Error",
-			"error":   err.Error(),
-		})
+		panic(err)
+	}
+
+	// Get result and encode as hexadecimal string
+	sha := hex.EncodeToString(h.Sum(nil))
+
+	fmt.Printf("Result: %s\n", sha)
+
+	if subtle.ConstantTimeCompare([]byte(sha), []byte(req.Razorpay_signature)) != 1 {
+		fmt.Println("Works")
+		return c.SendStatus(fiber.StatusPaymentRequired)
+
 	}
 	var credit int
 	switch req.PlanName {
-	case "250": 
+	case "250":
 		credit = 250
 	case "500":
 		credit = 500
@@ -41,16 +59,15 @@ func UpdateCredit(c *fiber.Ctx) error {
 	case "5000":
 		credit = 10000
 	}
-	amt, _ := strconv.Atoi(req.PlanName)
-	if paymentDetail.OrderStatus == "PAID" && paymentDetail.OrderAmount == amt {
-		user := db.AddCredit(req.Uid, credit)
-		fmt.Println(amt)
-		fmt.Println(user)
-		return c.Status(fiber.StatusOK).JSON(&user)
-	} else {
-		return c.Status(fiber.StatusPaymentRequired).JSON(fiber.Map{
-			"messege": "Payment" + paymentDetail.OrderStatus,
-		})
-	}
+	// amt, _ := strconv.Atoi(req.PlanName)
+	// if paymentDetail.OrderStatus == "PAID" && paymentDetail.OrderAmount == amt {
+	user := db.AddCredit(req.Uid, credit)
+	fmt.Println(user)
+	return c.Status(fiber.StatusOK).JSON(&user)
+	// } else {
+	// 	return c.Status(fiber.StatusPaymentRequired).JSON(fiber.Map{
+	// 		"messege": "Payment" + paymentDetail.OrderStatus,
+	// 	})
+	// }
 
 }
