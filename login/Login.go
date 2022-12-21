@@ -34,6 +34,11 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
+	if logindetail.Password != user.Password {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": "Incorrect Password",
+		})
+	}
 
 	return c.Status(fiber.StatusOK).JSON(&user)
 }
