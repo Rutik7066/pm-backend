@@ -37,6 +37,7 @@ func CreateOrder(c *fiber.Ctx) error {
 		log.Println("[ERROR] : " + err.Error())
 		return c.SendString(err.Error())
 	}
+	// log.Println("[Request Response] : " + string(body))
 	return c.Status(fiber.StatusOK).JSON(&body)
 
 }

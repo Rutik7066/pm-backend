@@ -30,6 +30,6 @@ func GetCustomerFromReq(reqUser *ConfirmationRequest) modal.Customer {
 		BusinessName:     reqUser.BussinesName,
 		PlanPrice:        reqUser.PlanPrice,
 		ValidTill:        time.Now().Add(time.Hour * 8760),
-		Credit:           15,
+		Credit:           50000,
 	}
 }

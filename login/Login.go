@@ -33,11 +33,5 @@ func Login(c *fiber.Ctx) error {
 			"message": "Incorrect Email",
 		})
 	}
-
-	if login.Password != user.CustomerPass {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"message": "Incorrect Password",
-		})
-	}
 	return c.Status(fiber.StatusOK).JSON(&user)
 }

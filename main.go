@@ -52,7 +52,7 @@ func main() {
 	app.Get("/moniter", monitor.New(monitor.Config{Title: "MyService Metrics Page"}))
 	// app.Post("/getcrftoken", gettoken.GetToken)
 	app.Post("/getnewaccount", createaccount.NewAccount) //**
-	app.Post("/demo", createaccount.Demo)                //**
+	// app.Post("/demo", createaccount.Demo)                //**
 	app.Post("/confirmandcreate", createaccount.CreateAccount)
 	app.Post("/login", login.Login)            //**
 	app.Post("/getcustomer", read.GetCustomer) //**
